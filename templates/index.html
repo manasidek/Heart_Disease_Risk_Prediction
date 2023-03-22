@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cardiovascular Prediction</title>
+  <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" 
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+      
+    />
+  <link rel="stylesheet" href="static/css/style.css" />
+</head>
+
+<body style = "background-color:lavenderblush;">
+ 
+ <div class="wrapper">
+  
+  <!-- Jumbotron -->
+  <div class="jumbotron">
+    <h1 class ="display-4" >Cardiovascular Risk Prediction</h1>
+    <p></p>
+  </div>
+
+  <!-- Article title and paragraph -->
+  <div class="container-fluid">
+    <div class="row">
+      
+      <div class="col-md-7 article-p">
+        <p>
+          &nbsp;&nbsp;&nbsp;Cardiovascular disease (CVD) makes our heart and blood vessels dysfunctional and often leads to death or physical paralysis. Therefore, early and automatic detection of CVD can save many human lives.<br>
+          &nbsp;&nbsp;&nbsp;If we consider cardiovascular diseases as preventable by changes in lifestyle factors, it makes it a perfect project for machine learning. If those factors can be analyzed and risk assessed, we can create a warning system to encourage lifestyle changes or further medical interventions.<br>
+          &nbsp;&nbsp;&nbsp;Machine learning helps a cardiologist to predict heart disease at an early stage and treat the patient accordingly.This project allows us to gain substantial information,health causes, relationships linked to heart disease, and trends to be identified.<br>
+          &nbsp;&nbsp;&nbsp;Even though some factors such as smoke, alcohol, being active and gender have low importance in the dataset, the correlation between these factors tells us that they do sometimes play a role in the cardiovascular health.<br>
+          &nbsp;&nbsp;&nbsp;Heart Disease Risk predicts a patient’s heart disease or predicts the patients who may develop heart disease because of their condition.<br><br>
+        </p>
+      </div>
+      <div class="col-md-5 correlation">
+        <img src="static/images/correlation_heatmap.png" alt="correlation_heatmap">
+        <br><br>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-3">
+        <h4>Calculate Body Mass Index</h4>
+        <div class="well">
+          <form action="{{url_for('calculate_bmi')}}"method="POST">
+            <label for="weight">Weight (in kgs):</label>
+            <input type="number" id="weight" name="weight" required><br>
+      
+            <label for="height">Height (in cms):</label>
+            <input type="number" id="height" name="height" step="0.01" required><br><br>
+
+            <div class="col-md-6">
+              <button type="submit" class="btn btn-primary btn-block btn-large">Calculate BMI</button>
+              <br>
+            </div>
+            
+          </form>
+          <h4>BMI Results<br></h4>
+          <p>Your BMI is: {{ bmi }}</p>
+        </div>
+      </div>
+      <div class="col-md-5">
+          <h4>Enter the Patient statistics!<br></h4>
+            <!-- Main Input For Receiving Query to our ML -->
+            <form action="{{ url_for('predict')}}"method="post">
+              <label for="Age">Age (years):</label>
+              <input type="number" name="age (years)" placeholder="age (years)" required/>
+              <br><br>
+              <label for="BMI">Body Mass Index(BMI):</label>
+              <input type="number" name="BMI" placeholder="BMI" required/>
+              <br><br>
+              <label for="Systolic pressure">Systolic pressure:</label>
+              <input type="number" name="Systolic pressure" placeholder="Systolic pressure" required/>
+              <br><br>
+              <label for="Diastolic pressure">Diastolic pressure:</label>
+              <input type="number" name="Diastolic pressure" placeholder="Diastolic pressure" required/>
+              <br><br>
+              <label for=" gender"> Gender: </label>
+              <label for="gender"><input type="radio" name="gender" value="1" required> Female</label>
+              <label for="gender"><input type="radio" name="gender" value="2" required> Male</label>
+              <br><br>
+              <label for="cholesterol level">Cholesterol level:</label>
+              <label for="cholesterol level"><input type="radio" name="cholesterol level" value="1" required> Normal</label>
+              <label for="cholesterol level"><input type="radio" name="cholesterol level" value="2" required> Above Normal</label>
+              <label for="cholesterol level"><input type="radio" name="cholesterol level" value="3" required> Well Above Normal</label>
+              <br><br>
+              <label for="glucose">Glucose level:</label>
+              <label for="glucose"><input type="radio" name="glucose" value="1" required> Normal</label>
+              <label for="glucose"><input type="radio" name="glucose" value="2" required> Above Normal</label>
+              <label for="glucose"><input type="radio" name="glucose" value="3" required> Well Above Normal</label>
+              <br><br>
+              <label for="smoke">Smoke:</label>
+              <label for="smoke"><input type="radio" name="smoke" value="1" required> No</label>
+              <label for="smoke"><input type="radio" name="smoke" value="2" required> Yes</label>
+              <br><br>
+              <label for="alcohol">Alcohol:</label>
+              <label for="alcohol"><input type="radio" name="alcohol" value="1" required> No</label>
+              <label for="alcohol"><input type="radio" name="alcohol" value="2" required> Yes</label>
+              <br><br>
+              <label for="active">Active:</label>
+              <label for="active"><input type="radio" name="active" value="1" required> No</label>
+              <label for="active"><input type="radio" name="active" value="2" required> Yes</label>
+              <br><br>
+              <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-block btn-large">Predict</button>
+              </div>
+              
+            </form>
+      </div>  
+      <div class="col-md-4">
+        <h4>Prediction Results</h4>
+        {{ prediction_text }}
+      </div>
+
+      <div class="col-md-9 Visuals">
+        <br><br>
+        <div class='tableauPlaceholder' id='viz1679023707956' style='position: relative'><noscript>
+          <a href='#'><img alt=' ' src='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;he&#47;heart_disease_risk&#47;HeartDiseaseRisk&#47;1_rss.png:embed=yes&:tabs=no&:showVizHome=no&:autoplay=yes' style='border: none' /></a></noscript>
+          <object class='tableauViz'  style='display:none;'><param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' /> <param name='embed_code_version' value='3' /> <param name='path' value='views&#47;heart_disease_risk&#47;HeartDiseaseRisk?:language=en-US&amp;:embed=true' /> <param name='toolbar' value='yes' /><param name='static_image' value='https:&#47;&#47;public.tableau.com&#47;static&#47;images&#47;he&#47;heart_disease_risk&#47;HeartDiseaseRisk&#47;1.png' /> <param name='animate_transition' value='yes' /><param name='display_static_image' value='yes' /><param name='display_spinner' value='yes' /><param name='display_overlay' value='yes' /><param name='display_count' value='yes' /><param name='language' value='en-US' /></object></div>                <script type='text/javascript'>                    var divElement = document.getElementById('viz1679023707956');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);
+          </script>
+
+      </div>
+    </div>
+  </div>        
+
+  <br>
+  <br>
+  
+
+ </div>
+
+
+</body>
+</html>
